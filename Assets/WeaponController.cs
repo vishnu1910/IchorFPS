@@ -9,10 +9,15 @@ public class WeaponController : MonoBehaviour
     public float AttackCooldown = 1.0f;
     public AudioClip SwordAttackSound;
     public bool IsAttacking = false;
+    public SFPSC_PlayerMovement pm;
+
     void Update(){
-        if (Input.GetMouseButtonDown(0) && CanAttack){
+        if (Input.GetMouseButtonDown(0) && CanAttack && pm.isGrounded){
             SwordAttack();
         }
+        else if(Input.GetMouseButtonDown(0) && CanAttack && !pm.isGrounded){
+            JumpAttack();
+        } 
     }
 
     public void SwordAttack(){
@@ -20,6 +25,16 @@ public class WeaponController : MonoBehaviour
         CanAttack =false;
         Animator anim = Sword.GetComponent<Animator>();
         anim.SetTrigger("Attack");
+        AudioSource ac = GetComponent<AudioSource>();
+        ac.PlayOneShot(SwordAttackSound);
+        StartCoroutine(ResetAttackCooldown());
+    }
+
+    public void JumpAttack(){
+        IsAttacking = true;
+        CanAttack =false;
+        Animator anim = Sword.GetComponent<Animator>();
+        anim.SetTrigger("JumpAttack");
         AudioSource ac = GetComponent<AudioSource>();
         ac.PlayOneShot(SwordAttackSound);
         StartCoroutine(ResetAttackCooldown());

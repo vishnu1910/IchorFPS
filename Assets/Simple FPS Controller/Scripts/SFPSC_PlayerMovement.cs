@@ -64,7 +64,7 @@ public class SFPSC_PlayerMovement : MonoBehaviour
         this.TryGetComponent<SFPSC_GrapplingHook>(out grapplingHook);
     }
 
-    private bool isGrounded = false;
+    public bool isGrounded = false;
     public bool IsGrounded { get { return isGrounded; } }
 
     private Vector3 inputForce;
