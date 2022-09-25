@@ -105,6 +105,7 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
+        public AttackingForDummies canMove;
 
         private const float _threshold = 0.01f;
 
@@ -212,21 +213,25 @@ namespace StarterAssets
         }
 
         private void Move()
-        {
+        {   
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
             if (_input.move == Vector2.zero) targetSpeed = 0.0f;
-
+            
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+
+
+            if(_animator.GetCurrentAnimatorStateInfo(0).IsName("hit1") || _animator.GetCurrentAnimatorStateInfo(0).IsName("hit2") || _animator.GetCurrentAnimatorStateInfo(0).IsName("hit3")){
+                targetSpeed = 0.0f;
+            }
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
