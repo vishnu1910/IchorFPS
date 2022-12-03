@@ -34,7 +34,7 @@ namespace StarterAssets
 
         [Space(10)]
         [Tooltip("The height the player can jump")]
-        public float JumpHeight = 1.2f;
+        public float JumpHeight = 10f;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
@@ -97,6 +97,9 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
+
+        public float fallMultiplier = 1.5f;
+        public float lowJumpMultiplier = 1.1f;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
@@ -229,7 +232,8 @@ namespace StarterAssets
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
 
-            if(_animator.GetCurrentAnimatorStateInfo(0).IsName("hit1") || _animator.GetCurrentAnimatorStateInfo(0).IsName("hit2") || _animator.GetCurrentAnimatorStateInfo(0).IsName("hit3")){
+            if(_animator.GetCurrentAnimatorStateInfo(0).IsName("hit1") || _animator.GetCurrentAnimatorStateInfo(0).IsName("hit2") || _animator.GetCurrentAnimatorStateInfo(0).IsName("hit3")
+            || _animator.GetCurrentAnimatorStateInfo(0).IsName("GotHit") ||_animator.GetCurrentAnimatorStateInfo(0).IsName("Dead")){
                 targetSpeed = 0.0f;
             }
 
@@ -308,7 +312,7 @@ namespace StarterAssets
                 if (_input.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    _verticalVelocity = Mathf.Sqrt(1.9f * -2f * Gravity);
 
                     // update animator if using character
                     if (_hasAnimator)
@@ -336,9 +340,12 @@ namespace StarterAssets
                 else
                 {
                     // update animator if using character
-                    if (_hasAnimator)
+                    if (_hasAnimator && !Grounded)
                     {
                         _animator.SetBool(_animIDFreeFall, true);
+                    }
+                    else if(Grounded){
+                        _animator.SetBool(_animIDFreeFall, false);
                     }
                 }
 
@@ -350,6 +357,11 @@ namespace StarterAssets
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
+                if(_verticalVelocity < 0 ){
+                    _verticalVelocity += Gravity * 1f * Time.deltaTime;
+                } else if(_verticalVelocity>0 && !Input.GetButton("Jump")){
+                    _verticalVelocity += Gravity * 0.5f * Time.deltaTime;
+                }
             }
         }
 

@@ -10,7 +10,7 @@ public class AttackingForDummies : MonoBehaviour
     private float nextFireTime = 0f;
     public static int noOfClicks = 0;
     float lastClickedTime = 0;
-    float maxComboDelay = 1;
+    float maxComboDelay = 0.7f;
     private float normalizedTimeThing = 0.5f;
     public bool canMove = true;
     public bool PlayerIsAttacking = false;
@@ -72,31 +72,33 @@ public class AttackingForDummies : MonoBehaviour
     void OnClick()
     {
         //so it looks at how many clicks have been made and if one animation has finished playing starts another one.
-        
-        if (noOfClicks == 0)
-        {
-            PlayerIsAttacking = true;
-            lastClickedTime = Time.time;
-            noOfClicks=1;
-            anim.SetInteger("clicks", noOfClicks);
-            source.PlayOneShot(clip);
-        }
-        
-        if (noOfClicks == 1 && anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.3f && anim.GetCurrentAnimatorStateInfo(0).IsName("hit1"))
-        {
-            PlayerIsAttacking = true;
-            lastClickedTime = Time.time;
-            noOfClicks=2;
-            anim.SetInteger("clicks", noOfClicks);
-            source.PlayOneShot(clip);
-        }
-        if (noOfClicks == 2 && anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && anim.GetCurrentAnimatorStateInfo(0).IsName("hit2"))
-        {
-            PlayerIsAttacking = true;
-            lastClickedTime = Time.time;
-            noOfClicks=3;
-            anim.SetInteger("clicks", noOfClicks);
-            source.PlayOneShot(clip);
+        Debug.Log(anim.GetCurrentAnimatorStateInfo(0));
+        if(!anim.GetCurrentAnimatorStateInfo(0).IsName("GotHit") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Dead")){
+            if (noOfClicks == 0)
+            {
+                PlayerIsAttacking = true;
+                lastClickedTime = Time.time;
+                noOfClicks=1;
+                anim.SetInteger("clicks", noOfClicks);
+                source.PlayOneShot(clip);
+            }
+            
+            if (noOfClicks == 1 && anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.3f && anim.GetCurrentAnimatorStateInfo(0).IsName("hit1"))
+            {
+                PlayerIsAttacking = true;
+                lastClickedTime = Time.time;
+                noOfClicks=2;
+                anim.SetInteger("clicks", noOfClicks);
+                source.PlayOneShot(clip);
+            }
+            if (noOfClicks == 2 && anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.1f && anim.GetCurrentAnimatorStateInfo(0).IsName("hit2"))
+            {
+                PlayerIsAttacking = true;
+                lastClickedTime = Time.time;
+                noOfClicks=3;
+                anim.SetInteger("clicks", noOfClicks);
+                source.PlayOneShot(clip);
+            }
         }
     }
 }
