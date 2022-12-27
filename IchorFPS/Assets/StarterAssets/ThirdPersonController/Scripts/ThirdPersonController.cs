@@ -268,6 +268,11 @@ namespace StarterAssets
                                   _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
+                
+                if(_animator.GetCurrentAnimatorStateInfo(0).IsName("hit1") || _animator.GetCurrentAnimatorStateInfo(0).IsName("hit2") || _animator.GetCurrentAnimatorStateInfo(0).IsName("hit3")
+                || _animator.GetCurrentAnimatorStateInfo(0).IsName("GotHit") ||_animator.GetCurrentAnimatorStateInfo(0).IsName("Dead")){
+                    rotation = 0.0f;
+                }
 
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);

@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: mixamo.com
+  m_Name: enemyattack
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -54116,6 +54116,20 @@ AnimationClip:
   m_Events:
   - time: 0.43333334
     functionName: OnSwing
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.53333336
+    functionName: shouldEnemyDeflect
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.73333335
+    functionName: shouldEnemyNotDeflect
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

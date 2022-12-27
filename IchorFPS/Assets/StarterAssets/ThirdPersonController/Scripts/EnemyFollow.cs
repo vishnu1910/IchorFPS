@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 [RequireComponent(typeof(CharacterController))]
 
 public class EnemyFollow : MonoBehaviour {
@@ -11,8 +12,12 @@ public class EnemyFollow : MonoBehaviour {
     private bool hasAttacked = false;
 	public Transform target;
 	public NavMeshAgent agent;
-	private float AttackRate = 1f;
-	private float NextAttack = 0f; 
+	private float AttackRate = 0.5f;
+	private float NextAttack = 0f;
+	private float NextMove = 0f; 
+
+	public bool mustEnemyDeflect = false;
+	// private Vector3 direction;
 
 	public AudioSource source;
 	public AudioClip swing;
@@ -61,6 +66,8 @@ public class EnemyFollow : MonoBehaviour {
 
 		// //get the distance between the chaser and the target
 		float distance = Vector3.Distance(transform.position,target.position);
+		// direction = target.position - transform.position;
+		
         // Debug.Log(distance);
 		// //so long as the chaser is farther away than the minimum distance, move towards it at rate speed.
 		anim.SetBool("Walk", agent.velocity.magnitude>0.01f);
@@ -70,7 +77,8 @@ public class EnemyFollow : MonoBehaviour {
         //     //transform.position = new Vector3(transform.position.x, 0, transform.position.z);
         // }
 
-		agent.destination  = target.position;
+		//agent.destination  = target.position;
+		agent.destination = target.position;
 		if (anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy"))
         {
 			agent.velocity = Vector3.zero;
@@ -81,14 +89,14 @@ public class EnemyFollow : MonoBehaviour {
         {
 			agent.velocity = Vector3.zero;
 			anim.SetBool("Attack", false);
+			NextMove = Time.time+ 1f;
 			// NextAttack = Time.time+ AttackRate;
         }
         if (distance<2.3f && Time.time>NextAttack){
 			NextAttack = Time.time+ AttackRate;
-			transform.LookAt(target);
+			if (!(Time.time<NextMove)) transform.LookAt(target);
 			
             if(hasAttacked == false){
-
 				EnemyIsAttacking = true;
 				anim.SetBool("Attack", true);
 				//source.PlayOneShot(clip);
@@ -96,6 +104,11 @@ public class EnemyFollow : MonoBehaviour {
 			}
             else hasAttacked  = false;
         }
+		if (Time.time<NextMove){
+			agent.velocity = Vector3.zero;
+			//Debug.Log("Not moving");
+			anim.SetBool("Attack", false);
+		}
 	}
 
 	// Set the target of the chaser
@@ -130,4 +143,14 @@ public class EnemyFollow : MonoBehaviour {
 		}
 	}
 
+	private void Evaporate(AnimationEvent animationEvent){
+		// Destroy(gameObject);
+		// Application.LoadLevel("EndLevel");
+	}
+	private void shouldEnemyDeflect(AnimationEvent animationEvent){
+        mustEnemyDeflect = true;
+    }
+    private void shouldEnemyNotDeflect(AnimationEvent animationEvent){
+        mustEnemyDeflect = false;
+    }
 }

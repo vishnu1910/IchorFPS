@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1e52c2259b662ae48b812a52cfa06863
+guid: bea459b7348c74f4cbc8c0bf4e0c2d51
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
@@ -18,7 +18,7 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     removeConstantScaleCurves: 1
-    motionNodeName: 
+    motionNodeName: <Root Transform>
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
@@ -852,7 +852,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 1ed2ca602a424b445b382c8448207f3e, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 8bfa08c9e8f5ecd4bb93fea6e2521998, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
