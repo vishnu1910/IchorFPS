@@ -45,7 +45,7 @@ public class EnemyFollow : MonoBehaviour {
 		// 	}
 		// }
 
-		agent.destination  = target.position;
+		agent.destination  = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -78,7 +78,7 @@ public class EnemyFollow : MonoBehaviour {
         // }
 
 		//agent.destination  = target.position;
-		agent.destination = target.position;
+		if(distance<5f) agent.destination = target.position;
 		if (anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy"))
         {
 			agent.velocity = Vector3.zero;

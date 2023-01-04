@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using StarterAssets;
 public class AttackingForDummies : MonoBehaviour
 {
     private Animator anim;
     private Animator anim1;
+    private float originalGravity;
     public float cooldownTime = 2f;
     private float nextFireTime = 0f;
     public static int noOfClicks = 0;
@@ -18,6 +19,7 @@ public class AttackingForDummies : MonoBehaviour
     private bool mustDeflect = false;
     private bool mustEnemyDeflect = false;
     
+    Rigidbody rb;
     public EnemyFollow ef;
     GameObject enemy;
 
@@ -26,6 +28,8 @@ public class AttackingForDummies : MonoBehaviour
     public AudioClip deflectSound;
     [Range(0, 1)] public float SwingAudioVolume = 0.5f;
     private CharacterController controller;
+    ThirdPersonController tpc;
+
 
     private void Start()
     {
@@ -34,6 +38,8 @@ public class AttackingForDummies : MonoBehaviour
         anim = GetComponent<Animator>();
         anim1 = enemy.GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
+        tpc = GetComponent<ThirdPersonController>();
     }
 
     void Update()
@@ -84,6 +90,9 @@ public class AttackingForDummies : MonoBehaviour
                 OnClick();
  
             }
+            if (Input.GetKeyDown(KeyCode.LeftAlt)){
+                StartCoroutine(Dash());
+            }
         }
         // Debug.Log(PlayerIsAttacking);
     }
@@ -118,6 +127,18 @@ public class AttackingForDummies : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator Dash(){
+        Debug.Log("hello");
+        originalGravity = tpc.Gravity;
+        tpc.Gravity = 0f;
+        // controller.SimpleMove(Vector3.zero);
+        controller.Move(transform.forward*3);
+        yield return new WaitForSeconds(0.4f);
+        tpc.Gravity = originalGravity;
+
+    }
+
     private void attack1(AnimationEvent animationEvent){
         if (animationEvent.animatorClipInfo.weight > 0.5f)
 		{
